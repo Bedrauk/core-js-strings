@@ -20,7 +20,7 @@
  *   getStringLength(undefined) => 0
  */
 function getStringLength(value) {
-  return value.length;
+  return value ? value.length : 0;
 }
 
 /**
@@ -38,7 +38,7 @@ function getStringLength(value) {
  *   isString(new String('test')) => true
  */
 function isString(value) {
-  return typeof value;
+  return typeof value === 'string' || value instanceof String;
 }
 
 /**
@@ -54,7 +54,7 @@ function isString(value) {
  *   concatenateStrings('', 'bb') => 'bb'
  */
 function concatenateStrings(value1, value2) {
-  return value1 + value2;
+  return value1.concat(value2);
 }
 
 /**
@@ -69,7 +69,7 @@ function concatenateStrings(value1, value2) {
  *   getFirstChar('') => ''
  */
 function getFirstChar(value) {
-  return value[0];
+  return value.charAt(0);
 }
 
 /**
@@ -131,7 +131,7 @@ function removeTrailingWhitespaces(value) {
  *   repeatString('abc', -2) => ''
  */
 function repeatString(str, times) {
-  return str.repeat(times);
+  return times >= 0 ? str.repeat(times) : '';
 }
 
 /**
@@ -147,7 +147,11 @@ function repeatString(str, times) {
  *   removeFirstOccurrences('ABABAB', 'BA') => 'ABAB'.
  */
 function removeFirstOccurrences(str, value) {
-  return str.replace(value, '');
+  const firstOccur = str.indexOf(value);
+  if (firstOccur === -1) return str;
+  const part1 = str.slice(0, firstOccur);
+  const part2 = str.slice(firstOccur + value.length);
+  return part1.concat(part2);
 }
 
 /**
@@ -163,8 +167,11 @@ function removeFirstOccurrences(str, value) {
  *   removeLastOccurrences('ABABAB', 'BA') => 'ABAB'.
  */
 function removeLastOccurrences(str, value) {
-  const regex = new RegExp(`${value}(?!.*${value})`);
-  return str.replace(regex, '');
+  const lastOccur = str.lastIndexOf(value);
+  if (lastOccur === -1) return str;
+  const part1 = str.slice(0, lastOccur);
+  const part2 = str.slice(lastOccur + value.length);
+  return part1.concat(part2);
 }
 
 /**
@@ -181,6 +188,7 @@ function removeLastOccurrences(str, value) {
  */
 function sumOfCodes(str) {
   let total = 0;
+  if (!str) return 0;
   for (let i = 0; i < str.length; i += 1) {
     total += str.charCodeAt(i);
   }
@@ -396,7 +404,7 @@ function invertCase(str) {
  *   getStringFromTemplate('Chuck','Norris') => 'Hello, Chuck Norris!'
  */
 function getStringFromTemplate(firstName, lastName) {
-  return `Hello, ${firstName} ${lastName} !`;
+  return `Hello, ${firstName} ${lastName}!`;
 }
 
 /**
